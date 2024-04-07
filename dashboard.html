@@ -1,0 +1,205 @@
+
+<!--
+last modification: 02/04/24
+Description: HTML structure for the front end of tree management webapp
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      crossorigin=""
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
+    />
+
+    <style>
+      .btn-primary {
+        color: blue !important; /* Ensure the text color is white */
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100vh;
+        width: 100vw;
+      }
+      .controls-overlay {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        z-index: 1000; /* Ensures overlay is above the map */
+      }
+      .filters,
+      .add-tree-button {
+        background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px; /* Space between filters and add tree button */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="controls-overlay">
+      <div class="filters">
+        <form id="filterForm">
+          <label for="treeType">Tree Type:</label>
+          <select id="treeType" name="treeType">
+            <option value="">--Select a Tree Type--</option>
+            <!-- Options will be populated dynamically from the database -->
+          </select>
+
+          <label for="minAge">Min Age:</label>
+          <input type="number" id="minAge" name="minAge" placeholder="Min" />
+
+          <label for="maxAge">Max Age:</label>
+          <input type="number" id="maxAge" name="maxAge" placeholder="Max" />
+
+          <label for="minHeight">Min Height (m):</label>
+          <input
+            type="number"
+            id="minHeight"
+            name="minHeight"
+            placeholder="Min"
+          />
+
+          <label for="maxHeight">Max Height (m):</label>
+          <input
+            type="number"
+            id="maxHeight"
+            name="maxHeight"
+            placeholder="Max"
+          />
+
+          <button type="submit">Apply Filters</button>
+        </form>
+      </div>
+      <button
+        type="button"
+        class="btn btn-primary add-tree-button"
+        data-toggle="modal"
+        data-target="#addTreeModal"
+      >
+        Add Tree
+      </button>
+    </div>
+    <!-- The Modal -->
+    <div
+      class="modal fade"
+      id="addTreeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="addTreeModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title" id="addTreeModalLabel">Add New Tree</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <form id="addTreeForm">
+              <div class="form-group">
+                <label for="treeName">Tree Name:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="treeName"
+                  name="treeName"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="treeAge">Tree Age (years):</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="treeAge"
+                  name="treeAge"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="treeHeight">Tree Height (m):</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="treeHeight"
+                  name="treeHeight"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label>Tree Location:</label>
+                <div id="treeLocationMap" style="height: 300px"></div>
+                <!-- Mini-map for location selection -->
+              </div>
+            </form>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              id="submitTreeButton"
+              class="btn btn-primary"
+              style="color: blue"
+            >
+              Add Tree
+            </button>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <button id="deleteTreeButton" class="btn btn-danger">
+      Delete Tree
+    </button>
+
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    
+      crossorigin=""
+    ></script>
+    <!-- Include jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <script src="dashboard.js"></script>
+  </body>
+</html>
